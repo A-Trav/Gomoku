@@ -1,11 +1,15 @@
 import express, { Request, Response } from "express";
 
+import { getGameLogById } from "../service/gameLog.service";
+
 const gameLogHandler = express.Router();
 
-gameLogHandler.get("/", async (req: Request, res: Response) => {  // expecting /:id here
+gameLogHandler.get("/:id", async (req: Request, res: Response) => {
     try {
-        console.log('game-log/:id')
-        return res.status(200).send('game-log/:id page');
+        const game = await getGameLogById(req.params.id);
+        console.log(game)
+        if (!game) return res.sendStatus(404);
+        return res.status(200).send(game);
     } catch (err) {
         return res.status(500).send(err);
     }
