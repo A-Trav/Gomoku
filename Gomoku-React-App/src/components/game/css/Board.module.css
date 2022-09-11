@@ -1,0 +1,14 @@
+.board {
+    width: auto;
+    background-color: #e8a87c;
+    border-radius: .8rem;
+    flex-direction: column;
+    row-gap: .5rem;
+    padding: .75rem;
+    display: flex;
+}
+
+.tile {
+    display: grid;
+    gap: 0.5rem;
+}

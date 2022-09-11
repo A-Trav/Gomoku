@@ -1,0 +1,18 @@
+.dropDown {
+    width: 100%;
+    border: 2px solid #b6b4b4;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    color: b6b4b4;
+    padding: 0.5rem 0.5rem;
+}
+
+.listBox {
+    border: 1px solid red;
+    border-radius: 5px;
+}
+
+.dropDownItem {
+    height: 2rem;
+    color: b6b4b4;
+}

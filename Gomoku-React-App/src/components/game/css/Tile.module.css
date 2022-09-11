@@ -1,0 +1,26 @@
+.tile {
+    height: 2.5rem;
+    width: 2.5rem;
+    box-sizing: border-box;
+    cursor: pointer;
+    background-color: #85dcb0;
+    border: 1px solid #41b3a3;
+    border-radius: 2.5rem;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.tile.player1 {
+    background-color: #000;
+    color: #fff;
+}
+
+.tile.player2 {
+    background-color: #fff;
+    color: #000;
+}
+
+.tile.available:hover {
+    opacity: .5;
+    background-color: #41b3a3;
+}
