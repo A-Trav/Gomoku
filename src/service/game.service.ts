@@ -6,15 +6,33 @@ export async function createGame(input: DocumentDefinition<GameDocument>) {
     return GameModel.create(input);
 }
 
-export async function updateGame(id: string, userId: string, input: DocumentDefinition<GameDocument>) {
+export async function getGameById(id: string, userId: string) {
+    return GameModel.findOne({
+        _id: new mongoose.Types.ObjectId(id),
+        userId: new mongoose.Types.ObjectId(userId)
+    }).lean();
+}
+
+export async function updateGame(id: string, userId: string, turn: number) {
     return GameModel.findOneAndUpdate(
         {
             _id: new mongoose.Types.ObjectId(id),
             userId: new mongoose.Types.ObjectId(userId)
         },
-        input,
+        { "$push": { "state": turn } },
         { new: true }
-    )
+    ).lean();
+}
+
+export async function setGameOver(id: string, userId: string, gameOver: boolean) {
+    return GameModel.findOneAndUpdate(
+        {
+            _id: new mongoose.Types.ObjectId(id),
+            userId: new mongoose.Types.ObjectId(userId)
+        },
+        { "$set": { "gameOver": gameOver } },
+        { new: true }
+    ).lean();
 }
 
 export async function deleteGame(id: string, userId: string) {
