@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Header, UserProvider } from './components/app';
-import { Game, GameLog, Games, Home, Login } from './pages';
+import { Game, GameLog, Games, Home, Login, SignUp } from './pages';
 
 import style from './css/App.module.css';
 
@@ -15,6 +15,7 @@ function App() {
           <Route path="/games" element={<Games />} />
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/sign-up" element={<SignUp />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

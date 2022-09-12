@@ -1,34 +1,43 @@
 import { useParams, useNavigate, Navigate } from "react-router-dom"
-import { useLocalStorage } from "../utils/hooks"
-import { GameResult } from "../utils/types"
-import { getCurrentPlayer } from "../utils/game"
 import { Board, GameDetails } from "../components/game"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../utils/context"
+import { get } from "../utils/http"
+import { GameLogDetails } from "../utils/types"
 
 import style from './css/GameLog.module.css'
 import { Button } from "../components/app"
 
 export default function GameLog() {
-    const { user } = useContext(UserContext)
-    const { id } = useParams()
-    const [games, saveGame] = useLocalStorage<Record<string, GameResult>>(
-        'Games', {})
-    const { [`Game #${id}`]: game } = games
     const navigate = useNavigate()
+    const { user } = useContext(UserContext)
+    const { id = '' } = useParams()
+    const [gameLog, setGameLog] = useState<GameLogDetails>()
+
+    const fetchGameDetails = async (id: string) => {
+        const game = await get<GameLogDetails>(`game-log/${id}`)
+        setGameLog(game);
+    }
+
+    useEffect(() => {
+        fetchGameDetails(id)
+    }, [id])
+
+    if (!gameLog) return null
+
     if (!user) return <Navigate to="/login" />
     return (
         <div className={style.container}>
             <GameDetails
-                currentPlayer={getCurrentPlayer(game.result.length, game.gameWon || game.gameDraw)}
-                gameWon={game.gameWon}
-                gameDraw={game.gameDraw}
+                currentPlayer={gameLog.winner}
+                gameWon={gameLog.winner ? true : false}
+                gameDraw={gameLog.winner ? false : true}
             />
             <Board
-                boardWidth={game.boardWidth}
-                currentPlayer={getCurrentPlayer(game.result.length, game.gameWon || game.gameDraw)}
-                gameComplete={(game.gameWon || game.gameDraw)}
-                historicState={game.result}
+                boardWidth={gameLog.boardWdith}
+                currentPlayer={gameLog.winner}
+                gameComplete={true}
+                historicState={gameLog.result}
             />
             <div className={style.controller}>
                 <Button className={style.button} onClick={() => navigate('/games')}>Back</Button>

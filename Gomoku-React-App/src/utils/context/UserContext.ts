@@ -1,9 +1,10 @@
 import { createContext } from "react";
-import { User } from '../types'
+import { User } from "../../utils/types"
 
 type UserContextType = {
     user?: User
-    login: (username: string) => void
+    login: (username: string, password: string) => Promise<true | string>
+    register: (username: string, password: string) => Promise<true | string>
     logout: () => void
 }
 
