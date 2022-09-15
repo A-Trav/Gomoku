@@ -12,7 +12,6 @@ gamesHandler.get("/", async (req: Request, res: Response) => {
         const games = await getAllGameLogs(userId);
         return res.status(200).send(games.map(game => ({
             _id: game._id,
-            gameId: game.gameId,
             createdAt: game.createdAt,
             winner: game.winner
         })));

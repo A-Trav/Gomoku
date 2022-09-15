@@ -41,6 +41,7 @@ authHandler.post("/login", async (req: Request, res: Response) => {
     try {
         // Get user input
         const { username, password } = req.body;
+        console.log(username, password);
 
         // Check if user exists
         const user = await getUserByUsername(username);

@@ -33,6 +33,7 @@ export default function Tile(props: TileProps) {
     const handleClick = async () => {
         if (status === TILE_STATUS.AVAILABLE && !gameComplete) {
             console.log('selected tile', id)
+            const previousStatus = nextStatusChange
             if (onSelect)
                 await onSelect(id)
             setStatus(nextStatusChange as TILE_STATUS)

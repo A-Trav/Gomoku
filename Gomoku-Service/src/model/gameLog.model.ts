@@ -3,7 +3,6 @@ import { UserDocument } from "./user.model";
 
 export interface GameLogDocument extends Document {
     userId: UserDocument["_id"];
-    gameId: number;
     boardWidth: number;
     createdAt: Date;
     winner: string;
@@ -12,7 +11,6 @@ export interface GameLogDocument extends Document {
 
 const gameLogSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    gameId: Number,
     boardWidth: Number,
     createdAt: Date,
     winner: String,

@@ -5,14 +5,18 @@ import { UserDocument } from './user.model'
 export interface GameDocument extends Document {
     userId: UserDocument["_id"];
     boardWidth: number;
-    gameOver: boolean;
+    currentPlayer: PLAYERS;
+    gameDraw: boolean;
+    gameWon: boolean;
     state: [number];
 }
 
 const gameSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     boardWidth: Number,
-    gameOver: { type: Boolean, default: false },
+    currentPlayer: { type: String, default: PLAYERS.PLAYER1 },
+    gameDraw: { type: Boolean, default: false },
+    gameWon: { type: Boolean, default: false },
     state: [Number]
 })
 

@@ -1,8 +1,8 @@
 import mongoose, { DocumentDefinition } from 'mongoose';
+import { PLAYERS } from '../constants/types';
 import GameModel, { GameDocument } from '../model/game.model';
 
 export async function createGame(input: DocumentDefinition<GameDocument>) {
-    console.log({ ...input });
     return GameModel.create(input);
 }
 
@@ -13,24 +13,32 @@ export async function getGameById(id: string, userId: string) {
     }).lean();
 }
 
-export async function updateGame(id: string, userId: string, turn: number) {
+export async function updateGame(id: string, userId: string, turn: number, player: PLAYERS, won: boolean, draw: boolean) {
     return GameModel.findOneAndUpdate(
         {
             _id: new mongoose.Types.ObjectId(id),
             userId: new mongoose.Types.ObjectId(userId)
         },
-        { "$push": { "state": turn } },
+        {
+            "$push": { "state": turn },
+            "$set":
+            {
+                "currentPlayer": player,
+                "gameWon": won,
+                "gameDraw": draw
+            }
+        },
         { new: true }
     ).lean();
 }
 
-export async function setGameOver(id: string, userId: string, gameOver: boolean) {
+export async function setGameOver(id: string, userId: string, gameOver: boolean, winner: PLAYERS) {
     return GameModel.findOneAndUpdate(
         {
             _id: new mongoose.Types.ObjectId(id),
             userId: new mongoose.Types.ObjectId(userId)
         },
-        { "$set": { "gameOver": gameOver } },
+        { "gameOver": gameOver, "currentPlayer": winner },
         { new: true }
     ).lean();
 }

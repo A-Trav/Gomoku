@@ -1,7 +1,5 @@
-import { Dispatch } from 'react'
 import Tile from './Tile'
-import { GameAction } from '../../utils/hooks/gameReducer'
-import { GAME_ACTIONS, PLAYERS } from '../../utils/constants'
+import { PLAYERS } from '../../utils/constants'
 import { getCurrentPlayer } from '../../utils/game'
 
 import style from './css/Board.module.css'
