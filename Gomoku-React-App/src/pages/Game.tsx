@@ -1,81 +1,111 @@
-import { useState, useReducer, useEffect, useContext } from 'react'
+import { useState, useContext, useCallback, useEffect } from 'react'
 import { useLocation, useNavigate, Navigate } from 'react-router-dom'
-import { useLocalStorage, gameReducer } from '../utils/hooks'
 import { Button } from '../components/app'
 import { GameDetails, Board } from '../components/game'
-import { GameInitState, GameResult } from '../utils/types'
-import { GAME_ACTIONS } from '../utils/constants'
-import { checkForWin, checkForDraw, getCurrentPlayer } from '../utils/game'
+import { GameInitState, GameLogDetails, GameStart } from '../utils/types'
 import { UserContext } from '../utils/context'
+import { GameDetailsType } from '../utils/types'
+import { post, put, del } from '../utils/http'
+import { GameTurn } from '../utils/types/GameTurn'
+import { PLAYERS } from '../utils/constants'
 
 import style from './css/Game.module.css'
 
 export default function Game() {
-    const { user } = useContext(UserContext)
+    const { user, logout } = useContext(UserContext)
     const boardWidth = (useLocation().state as GameInitState)?.boardWidth
-    const [games, saveGame] = useLocalStorage<Record<string, GameResult>>('Games', {})
-    const currentGameTitle = `Game #${Object.keys(games).length}`
-    const [state, dispatch] = useReducer(gameReducer, [])
-    const [gameWon, setGameWon] = useState(false)
-    const [gameDraw, setGameDraw] = useState(false)
-    const [key, setKey] = useState(0)
+    const [gameDetails, setGameDetails] = useState<GameDetailsType>()
     const navigate = useNavigate()
 
+    const NewGame = useCallback(async () => {
+        try {
+            const result = await post<GameStart, GameDetailsType>('game/', { boardWidth: boardWidth })
+            result.currentPlayer = PLAYERS.PLAYER1
+            setGameDetails(result)
+        } catch (error) {
+            console.log((error as Error).message)
+            logout()
+            navigate('/')
+        }
+    }, [])
+
+
+    const saveGame = async () => {
+        try {
+            if (gameDetails) {
+                const result = await post<GameLogDetails, GameLogDetails>('/game-log/', {
+                    boardWidth: gameDetails.boardWidth,
+                    winner: gameDetails.currentPlayer,
+                    result: gameDetails.state
+                })
+            }
+        } catch (error) {
+            console.log((error as Error).message)
+            logout()
+            navigate('/')
+        }
+    }
+
+    const deleteGame = async () => {
+        try {
+            if (gameDetails) {
+                const result = await del(`/game/${gameDetails._id}`)
+            }
+        } catch (error) {
+            console.log((error as Error).message)
+            logout()
+            navigate('/')
+        }
+    }
+
+    const playTurn = async (id: number) => {
+        try {
+            if (gameDetails) {
+                console.log(gameDetails)
+                const result = await put<GameTurn, GameDetailsType>(`/game/${gameDetails._id}`, {
+                    state: id
+                })
+                setGameDetails(result)
+            }
+        } catch (error) {
+            console.log((error as Error).message)
+            logout()
+            navigate('/')
+        }
+    }
+
     useEffect(() => {
-        checkGameWon(state)
-        checkGameDraw(state)
-    })
+        if (!user) return
+        if (!gameDetails) {
+            console.count('UseEffect')
+            NewGame()
+        }
+    }, [])
 
-    if (!user) return <Navigate to="/login" />
-    if (!boardWidth) return <Navigate to="/home" />
-
-    function checkGameWon(state: number[]) {
-        if (checkForWin(state.filter((_, index) => getCurrentPlayer(index) === getCurrentPlayer(state.length - 1)), boardWidth))
-            setGameWon(true)
-    }
-
-    function checkGameDraw(state: number[]) {
-        if (checkForDraw(state.length, boardWidth))
-            setGameDraw(true)
-    }
-
-    function restart() {
-        dispatch({ type: GAME_ACTIONS.RESTART })
-        setGameWon(false)
-        setGameDraw(false)
-        setKey(key + 1)
-    }
+    if (!user) return < Navigate to="/login" replace />
+    if (!gameDetails) return null
 
     return (
         <div className={style.container}>
             <GameDetails
-                currentPlayer={getCurrentPlayer(state.length, (gameWon || gameDraw))}
-                gameWon={gameWon}
-                gameDraw={gameDraw}
+                currentPlayer={gameDetails.currentPlayer}
+                gameWon={gameDetails.gameWon}
+                gameDraw={gameDetails.gameDraw}
             />
             <Board
                 boardWidth={boardWidth}
-                currentPlayer={getCurrentPlayer(state.length, (gameWon || gameDraw))}
-                gameComplete={(gameWon || gameDraw)}
-                dispatch={dispatch}
-                key={key}
+                currentPlayer={gameDetails.currentPlayer}
+                gameComplete={(gameDetails.gameWon || gameDetails.gameDraw)}
+                tileSelected={playTurn}
+                key={gameDetails._id}
             />
             <div className={style.controller}>
                 <Button className={style.button} onClick={() => {
-                    restart()
+                    NewGame()
                 }}>Restart</Button>
                 <Button className={style.button} onClick={() => {
-                    if (gameDraw || gameWon) {
-                        saveGame({
-                            ...games, [currentGameTitle]: {
-                                winner: getCurrentPlayer(state.length, gameWon || gameDraw),
-                                date: new Date().toLocaleDateString(),
-                                result: state,
-                                boardWidth: boardWidth,
-                                gameWon: gameWon,
-                                gameDraw: gameDraw
-                            }
-                        })
+                    if (gameDetails.gameDraw || gameDetails.gameWon) {
+                        saveGame()
                         navigate('/games')
                     } else
                         navigate('/')

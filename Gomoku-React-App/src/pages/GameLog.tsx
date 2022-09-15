@@ -15,7 +15,7 @@ export default function GameLog() {
     const [gameLog, setGameLog] = useState<GameLogDetails>()
 
     const fetchGameDetails = async (id: string) => {
-        const game = await get<GameLogDetails>(`game-log/${id}`)
+        const game = await get<GameLogDetails>(`/game-log/${id}`)
         setGameLog(game);
     }
 
@@ -34,7 +34,7 @@ export default function GameLog() {
                 gameDraw={gameLog.winner ? false : true}
             />
             <Board
-                boardWidth={gameLog.boardWdith}
+                boardWidth={gameLog.boardWidth}
                 currentPlayer={gameLog.winner}
                 gameComplete={true}
                 historicState={gameLog.result}

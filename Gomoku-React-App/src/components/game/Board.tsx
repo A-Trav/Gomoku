@@ -11,11 +11,11 @@ type BoardProps = {
     currentPlayer: PLAYERS
     gameComplete: Boolean
     historicState?: number[]
-    dispatch?: Dispatch<GameAction>
+    tileSelected?: (id: number) => Promise<void>
 }
 
 export default function Board(props: BoardProps) {
-    const { boardWidth, currentPlayer, historicState, dispatch, gameComplete } = props
+    const { boardWidth, currentPlayer, historicState, tileSelected, gameComplete } = props
 
     function getHistoricState(index: number): string | undefined {
         if (historicState && historicState.indexOf(index) >= 0)
@@ -33,16 +33,8 @@ export default function Board(props: BoardProps) {
                 <Tile key={`tile - ${index}`} id={index} nextStatusChange={currentPlayer} gameComplete={gameComplete}
                     historicState={getHistoricState(index)}
                     historicTurnNumber={getHistoricTurnNumber(index)}
-                    onSelect={() => {
-                        if (dispatch) {
-                            dispatch({
-                                type: GAME_ACTIONS[currentPlayer],
-                                payload: {
-                                    id: index
-                                }
-                            })
-                        }
-                    }} />
+                    onSelect={tileSelected ? tileSelected : undefined}
+                />
             ))
         )
     }

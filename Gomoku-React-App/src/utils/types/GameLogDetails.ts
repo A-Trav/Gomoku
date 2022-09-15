@@ -1,9 +1,9 @@
 import { PLAYERS } from "../constants"
 
 export type GameLogDetails = {
-    _id: string
-    boardWdith: number
+    _id?: string
+    boardWidth: number
     result: number[]
-    createdAt: Date
+    createdAt?: Date
     winner: PLAYERS
 }

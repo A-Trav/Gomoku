@@ -8,7 +8,7 @@ type TileProps = {
     historicState?: string;
     historicTurnNumber?: number;
     nextStatusChange: string
-    onSelect: () => void
+    onSelect?: (id: number) => Promise<void>
     gameComplete: Boolean
 }
 
@@ -30,11 +30,12 @@ export default function Tile(props: TileProps) {
         }
     }
 
-    const handleClick = () => {
+    const handleClick = async () => {
         if (status === TILE_STATUS.AVAILABLE && !gameComplete) {
             console.log('selected tile', id)
+            if (onSelect)
+                await onSelect(id)
             setStatus(nextStatusChange as TILE_STATUS)
-            onSelect()
         }
     }
     if (historicState)
