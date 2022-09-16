@@ -2,19 +2,18 @@ import { useState, useContext, useCallback, useEffect } from 'react'
 import { useLocation, useNavigate, Navigate } from 'react-router-dom'
 import { Button } from '../components/app'
 import { GameDetails, Board } from '../components/game'
-import { GameInitState, GameLogDetails, GameStart } from '../utils/types'
 import { UserContext } from '../utils/context'
-import { GameDetailsType } from '../utils/types'
+import { GameLogDetails, GameStart, GameDetailsType, GameTurn } from '../utils/types'
 import { post, put, del } from '../utils/http'
-import { GameTurn } from '../utils/types/GameTurn'
 import { PLAYERS } from '../utils/constants'
 
 import style from './css/Game.module.css'
 
 export default function Game() {
     const { user, logout } = useContext(UserContext)
-    const boardWidth = (useLocation().state as GameInitState)?.boardWidth
+    const boardWidth = (useLocation().state as number)
     const [gameDetails, setGameDetails] = useState<GameDetailsType>()
+    const [lock, setLock] = useState(false)
     const navigate = useNavigate()
 
     const NewGame = useCallback(async () => {
@@ -29,11 +28,10 @@ export default function Game() {
         }
     }, [])
 
-
     const saveGame = async () => {
         try {
             if (gameDetails) {
-                const result = await post<GameLogDetails, GameLogDetails>('/game-log/', {
+                await post<GameLogDetails, GameLogDetails>('/game-log/', {
                     boardWidth: gameDetails.boardWidth,
                     winner: gameDetails.currentPlayer,
                     result: gameDetails.state
@@ -60,24 +58,27 @@ export default function Game() {
 
     const playTurn = async (id: number) => {
         try {
-            if (gameDetails) {
-                console.log(gameDetails)
+            if (!lock && gameDetails) {
+                setLock(true)
                 const result = await put<GameTurn, GameDetailsType>(`/game/${gameDetails._id}`, {
                     state: id
                 })
                 setGameDetails(result)
+                setLock(false)
+                return true
             }
+            return false
         } catch (error) {
             console.log((error as Error).message)
             logout()
             navigate('/')
+            return false
         }
     }
 
     useEffect(() => {
         if (!user) return
         if (!gameDetails) {
-            console.count('UseEffect')
             NewGame()
         }
     }, [])
@@ -106,6 +107,7 @@ export default function Game() {
                 <Button className={style.button} onClick={() => {
                     if (gameDetails.gameDraw || gameDetails.gameWon) {
                         saveGame()
+                        deleteGame()
                         navigate('/games')
                     } else
                         navigate('/')

@@ -4,9 +4,9 @@ import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../utils/context"
 import { get } from "../utils/http"
 import { GameLogDetails } from "../utils/types"
+import { Button } from "../components/app"
 
 import style from './css/GameLog.module.css'
-import { Button } from "../components/app"
 
 export default function GameLog() {
     const navigate = useNavigate()
@@ -40,7 +40,11 @@ export default function GameLog() {
                 historicState={gameLog.result}
             />
             <div className={style.controller}>
-                <Button className={style.button} onClick={() => navigate('/games')}>Back</Button>
+                <Button
+                    className={style.button}
+                    onClick={() => navigate('/games')}>
+                    Back
+                </Button>
             </div>
         </div >
     )

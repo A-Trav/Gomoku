@@ -8,9 +8,3 @@ export enum PLAYERS {
     PLAYER1 = 'PLAYER1',
     PLAYER2 = 'PLAYER2'
 }
-
-export enum GAME_ACTIONS {
-    // PLAYER1 = 'PLAYER1',
-    GAMETURN = 'GAMETURN',
-    RESTART = 'RESTART'
-}

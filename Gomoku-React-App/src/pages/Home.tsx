@@ -13,7 +13,7 @@ export default function Home() {
 
     function onClickHandler() {
         if (user && boardSizeSelection) {
-            navigate('/game', { state: { boardWidth: boardSizeSelection } })
+            navigate('/game', { state: boardSizeSelection })
         } else {
             if (!user)
                 navigate('/login')
