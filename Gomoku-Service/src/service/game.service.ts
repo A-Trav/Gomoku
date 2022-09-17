@@ -32,17 +32,6 @@ export async function updateGame(id: string, userId: string, turn: number, playe
     ).lean();
 }
 
-export async function setGameOver(id: string, userId: string, gameOver: boolean, winner: PLAYERS) {
-    return GameModel.findOneAndUpdate(
-        {
-            _id: new mongoose.Types.ObjectId(id),
-            userId: new mongoose.Types.ObjectId(userId)
-        },
-        { "gameOver": gameOver, "currentPlayer": winner },
-        { new: true }
-    ).lean();
-}
-
 export async function deleteGame(id: string, userId: string) {
     return GameModel.deleteOne({
         _id: new mongoose.Types.ObjectId(id),

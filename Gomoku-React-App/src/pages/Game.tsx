@@ -33,7 +33,7 @@ export default function Game() {
             if (gameDetails) {
                 await post<GameLogDetails, GameLogDetails>('/game-log/', {
                     boardWidth: gameDetails.boardWidth,
-                    winner: gameDetails.currentPlayer,
+                    winner: gameDetails.gameWon ? gameDetails.currentPlayer : undefined,
                     result: gameDetails.state
                 })
             }

@@ -5,5 +5,5 @@ export type GameLogDetails = {
     boardWidth: number
     result: number[]
     createdAt?: Date
-    winner: PLAYERS
+    winner?: PLAYERS
 }

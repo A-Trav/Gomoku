@@ -14,7 +14,7 @@ export default function Games() {
 
     const fetchGames = async () => {
         const pastGames = await get<GameLogDetails[]>(
-            '/games'
+            '/game-log'
         )
         setGames(pastGames)
     }
@@ -28,7 +28,7 @@ export default function Games() {
         <div className={style.container}>
             {games.length === 0 && <p>Retrieving game log from server...</p>}
             {games.map((game, index) => {
-                // Check this here as I believe there was a prefix 
+                // Check this here as I believe there was a prefix  
                 const gameDescription = `Game #${index + 1} @ ${game.createdAt} Winner: ${game.winner}`
                 return (
                     <div className={style.list} key={game._id} >
