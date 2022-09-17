@@ -2,7 +2,6 @@ import mongoose, { DocumentDefinition } from 'mongoose';
 import GameLogModel, { GameLogDocument } from '../model/gameLog.model';
 
 export async function createGameLog(input: DocumentDefinition<GameLogDocument>) {
-    console.log(input);
     return GameLogModel.create(input);
 }
 

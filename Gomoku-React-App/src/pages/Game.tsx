@@ -3,7 +3,7 @@ import { useLocation, useNavigate, Navigate } from 'react-router-dom'
 import { Button } from '../components/app'
 import { GameDetails, Board } from '../components/game'
 import { UserContext } from '../utils/context'
-import { GameLogDetails, GameStart, GameDetailsType, GameTurn } from '../utils/types'
+import { NewGameLogDetails, GameLogDetails, GameStart, GameDetailsType, GameTurn } from '../utils/types'
 import { post, put, del } from '../utils/http'
 import { PLAYERS } from '../utils/constants'
 
@@ -31,11 +31,12 @@ export default function Game() {
     const saveGame = async () => {
         try {
             if (gameDetails) {
-                await post<GameLogDetails, GameLogDetails>('/game-log/', {
+                await post<NewGameLogDetails, GameLogDetails>('/game-log/', {
                     boardWidth: gameDetails.boardWidth,
                     winner: gameDetails.gameWon ? gameDetails.currentPlayer : undefined,
                     result: gameDetails.state
                 })
+                await deleteGame()
             }
         } catch (error) {
             console.log((error as Error).message)

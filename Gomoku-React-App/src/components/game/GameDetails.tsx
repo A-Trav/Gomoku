@@ -3,7 +3,7 @@ import { PLAYERS } from "../../utils/constants";
 import style from './css/GameDetails.module.css'
 
 type GameDetailsProp = {
-    currentPlayer: PLAYERS
+    currentPlayer?: PLAYERS
     gameWon: Boolean
     gameDraw: Boolean
 }

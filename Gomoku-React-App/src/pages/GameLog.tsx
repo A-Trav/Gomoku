@@ -29,13 +29,13 @@ export default function GameLog() {
     return (
         <div className={style.container}>
             <GameDetails
-                currentPlayer={gameLog.winner}
+                currentPlayer={gameLog.winner ? gameLog.winner : undefined}
                 gameWon={gameLog.winner ? true : false}
                 gameDraw={gameLog.winner ? false : true}
             />
             <Board
                 boardWidth={gameLog.boardWidth}
-                currentPlayer={gameLog.winner}
+                currentPlayer={gameLog.winner ? gameLog.winner : undefined}
                 gameComplete={true}
                 historicState={gameLog.result}
             />

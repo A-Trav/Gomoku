@@ -3,7 +3,6 @@ import { PLAYERS } from "../constants/types";
 import { deserializeUser } from "../middleware/deserializeUser";
 import validateSchema from '../middleware/validateSchema'
 import { createGameSchema, updateGameSchema, deleteGameSchema } from "../schema/game.schema";
-
 import { createGame, getGameById, updateGame, deleteGame } from "../service/game.service";
 import { getCurrentPlayer, checkForDraw, checkForWin } from "../util/gameLogic";
 
@@ -31,7 +30,7 @@ gameHandler.put("/:id", validateSchema(updateGameSchema), async (req: Request, r
 
         // check if turn has already been played
         const game = await getGameById(id, userId);
-        if (!game || game.state.includes(turn) || game.gameWon || game.gameDraw) return res.sendStatus(400);
+        if (!game || game.state.includes(turn) || game.gameWon || game.gameDraw || turn >= (game.boardWidth * game.boardWidth)) return res.sendStatus(400);
 
         const playerMoves = [...game.state, turn].filter((_, index) => getCurrentPlayer(index) === game.currentPlayer)
         const gameWon = checkForWin(playerMoves, game.boardWidth);

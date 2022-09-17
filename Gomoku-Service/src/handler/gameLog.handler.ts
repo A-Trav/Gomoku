@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { deserializeUser } from "../middleware/deserializeUser";
 import validateSchema from "../middleware/validateSchema";
 import { getGameLogByIdSchema, createGameLogSchema } from "../schema/gameLog.schema";
+import { checkForDraw, checkForWin } from "../util/gameLogic";
 
 import { createGameLog, getAllGameLogs, getGameLogById } from "../service/gameLog.service";
 
@@ -27,6 +28,7 @@ gameLogHandler.get("/", async (req: Request, res: Response) => {
         const games = await getAllGameLogs(userId);
         return res.status(200).send(games.map(game => ({
             _id: game._id,
+            createdAt: game.createdAt,
             winner: game.winner
         })));
     } catch (err) {

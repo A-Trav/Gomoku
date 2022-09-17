@@ -4,7 +4,11 @@ const createPayload = {
     body: object({
         boardWidth: number({
             required_error: 'Board size is required'
-        })
+        }).min(
+            5, 'Board size must be 5 or greater'
+        ).max(
+            20, 'board size must be less than 20'
+        )
     })
 }
 
@@ -12,7 +16,7 @@ const updatePayload = {
     body: object({
         state: number({
             required_error: 'Game state is required'
-        })
+        }).nonnegative('Game move must be a positive number')
     })
 }
 

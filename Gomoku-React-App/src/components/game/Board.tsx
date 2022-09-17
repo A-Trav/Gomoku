@@ -6,7 +6,7 @@ import style from './css/Board.module.css'
 
 type BoardProps = {
     boardWidth: number
-    currentPlayer: PLAYERS
+    currentPlayer?: PLAYERS
     gameComplete: boolean
     historicState?: number[]
     tileSelected?: (id: number) => Promise<boolean>

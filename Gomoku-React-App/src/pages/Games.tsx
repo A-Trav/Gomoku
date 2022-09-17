@@ -28,8 +28,7 @@ export default function Games() {
         <div className={style.container}>
             {games.length === 0 && <p>Retrieving game log from server...</p>}
             {games.map((game, index) => {
-                // Check this here as I believe there was a prefix  
-                const gameDescription = `Game #${index + 1} @ ${game.createdAt} Winner: ${game.winner}`
+                const gameDescription = `Game #${index + 1} @ ${new Date(game.createdAt).toLocaleDateString()} Winner: ${game.winner ? game.winner : 'Draw'}`
                 return (
                     <div className={style.list} key={game._id} >
                         <p className={style.title}>{gameDescription}</p>
