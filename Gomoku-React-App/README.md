@@ -10,8 +10,8 @@ GENERAL
 
 RUN
 
-  To run the Gomoku game, ensure you have npm installed and clone the Gomoku-React-App repository.
-  Once you have cloned the repo, you can then run the app using npm start in the applications directory.
+  To run the Gomoku game, ensure you have npm installed and clone the Gomoku repository.
+  Once you have cloned the repo, you can then run the app using npm start in the Gomoku-React-App directory.
 
 EXTRA FEATURES
 

@@ -13,7 +13,7 @@ const createPayload = {
             number({
                 required_error: 'Game result is required'
             })
-        ).min(10, "Game must have atleast 10 turns for a player to have won")
+        ).min(9, "Game must have atleast 10 turns for a player to have won")
     })
 }
 

@@ -15,7 +15,7 @@ const run = async () => {
 
         await GameLogModel.deleteMany();
 
-        (`⚡️[server]: DB has been cleared`);
+        console.log(`⚡️[server]: DB has been cleared`);
         process.exit(0)
     } catch (err) {
         console.log(err);
