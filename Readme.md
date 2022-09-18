@@ -11,25 +11,27 @@ SETUP
 
 RUN
 
-  [Gomoku-Service]
+  Gomoku-Service
+
     In the command line from within the Gomoku-Service directoy, run the following command:
       npm run dev
 
-  [Gomoku-React-App] 
+  Gomoku-React-App
+
     In the command line from within the Gomoku-React-App directoy, run the following command:
       npm start
 
-  [Gomoku]
+  Gomoku
+
     To run the application, start the Gomoku-Service server application and then start the Gomoku-React-App application. 
     A Browser window will open the client application, but please ensure you keep the server application running whilst using 
     the client application. 
   
 Info
 
-  Note: This information is not necessary as you can simply create a user using the signup page or the provided Postman collection.
-  Demo application user:
-  user: Admin
-  password: Admin
+  Postman collection:
+   
+   [Gomoku API Collection](https://www.getpostman.com/collections/f711b4ca03c11c988ce4)
 
 # Gomoku-React-App
 
