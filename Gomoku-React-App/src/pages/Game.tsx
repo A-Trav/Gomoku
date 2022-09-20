@@ -5,7 +5,7 @@ import { GameDetails, Board } from '../components/game'
 import { UserContext } from '../utils/context'
 import { NewGameLogDetails, GameLogDetails, GameStart, GameDetailsType, GameTurn } from '../utils/types'
 import { post, put, del } from '../utils/http'
-import { PLAYERS } from '../utils/constants'
+import { PLAYERS, API_HOST } from '../utils/constants'
 
 import style from './css/Game.module.css'
 
@@ -18,7 +18,7 @@ export default function Game() {
 
     const NewGame = useCallback(async () => {
         try {
-            const result = await post<GameStart, GameDetailsType>('game/', { boardWidth: boardWidth })
+            const result = await post<GameStart, GameDetailsType>(`${API_HOST}/api/game/`, { boardWidth: boardWidth })
             result.currentPlayer = PLAYERS.PLAYER1
             setGameDetails(result)
         } catch (error) {
@@ -31,7 +31,7 @@ export default function Game() {
     const saveGame = async () => {
         try {
             if (gameDetails) {
-                await post<NewGameLogDetails, GameLogDetails>('/game-log/', {
+                await post<NewGameLogDetails, GameLogDetails>(`${API_HOST}/api/game-log/`, {
                     boardWidth: gameDetails.boardWidth,
                     winner: gameDetails.gameWon ? gameDetails.currentPlayer : undefined,
                     result: gameDetails.state
@@ -48,7 +48,7 @@ export default function Game() {
     const deleteGame = async () => {
         try {
             if (gameDetails) {
-                const result = await del(`/game/${gameDetails._id}`)
+                const result = await del(`${API_HOST}/api/game/${gameDetails._id}`)
             }
         } catch (error) {
             console.log((error as Error).message)
@@ -61,7 +61,7 @@ export default function Game() {
         try {
             if (!lock && gameDetails) {
                 setLock(true)
-                const result = await put<GameTurn, GameDetailsType>(`/game/${gameDetails._id}`, {
+                const result = await put<GameTurn, GameDetailsType>(`${API_HOST}/api/game/${gameDetails._id}`, {
                     state: id
                 })
                 setGameDetails(result)

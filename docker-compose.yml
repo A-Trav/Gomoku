@@ -1,0 +1,23 @@
+version: '3'
+services:
+  mongo-db:
+    image: mongo
+    ports:
+      - 27017:27017
+  client-app:
+    build: ./Gomoku-React-App
+    environment:
+      - REACT_APP_PROXY_HOST=http://server-app:8080
+    volumes:
+      - ./Gomoku-React-App/src:/Gomoku-React-App/src
+      - ./Gomoku-React-App/public:/Gomoku-React-App/public
+    ports:
+      - 3000:3000
+  server-app:
+    build: ./Gomoku-Service
+    environment:
+      - dbURI=mongodb://mongo-db:27017
+    volumes:
+      - ./Gomoku-Service/src:/Gomoku-Service/src
+    ports:
+      - 8080:8080

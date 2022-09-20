@@ -5,6 +5,7 @@ import { UserContext } from "../utils/context"
 import { get } from "../utils/http"
 import { GameLogDetails } from "../utils/types"
 import { Button } from "../components/app"
+import { API_HOST } from "../utils/constants"
 
 import style from './css/GameLog.module.css'
 
@@ -15,7 +16,7 @@ export default function GameLog() {
     const [gameLog, setGameLog] = useState<GameLogDetails>()
 
     const fetchGameDetails = async (id: string) => {
-        const game = await get<GameLogDetails>(`/game-log/${id}`)
+        const game = await get<GameLogDetails>(`${API_HOST}/api/game-log/${id}`)
         setGameLog(game);
     }
 

@@ -4,6 +4,7 @@ import { Button } from "../components/app"
 import { UserContext } from "../utils/context"
 import { get } from '../utils/http'
 import { GameLogDetails } from "../utils/types"
+import { API_HOST } from "../utils/constants"
 
 import style from './css/Games.module.css'
 
@@ -14,7 +15,7 @@ export default function Games() {
 
     const fetchGames = async () => {
         const pastGames = await get<GameLogDetails[]>(
-            '/game-log'
+            `${API_HOST}/api/game-log`
         )
         setGames(pastGames)
     }
